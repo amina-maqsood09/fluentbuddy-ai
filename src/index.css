@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-indigo: #4338CA;
+  --color-brand-indigo-light: #6366F1;
+  --color-brand-indigo-dark: #3730A3;
+  --color-brand-amber: #F59E0B;
+  --color-brand-amber-light: #FBBF24;
+  --color-brand-success: #10B981;
+  --color-brand-slate-text: #0F172A;
+  --color-brand-slate-secondary: #64748B;
+  --color-brand-offwhite: #F8FAFC;
+
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F8FAFC;
+  color: #0F172A;
+}
