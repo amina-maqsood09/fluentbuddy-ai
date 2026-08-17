@@ -51,7 +51,7 @@ If there's no mistake, set hasMistake to false and leave original/corrected/expl
             }
         )
 
-        const data = await response.json()
+        const data: any = await response.json()
 
         // TEMP DEBUG LOG
         console.log('GEMINI RAW RESPONSE:', JSON.stringify(data))
