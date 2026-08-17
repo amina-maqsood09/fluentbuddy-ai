@@ -1,6 +1,4 @@
-declare const process: {
-    env: Record<string, string | undefined>
-}
+import process from "process"
 
 export default async function handler(req: any, res: any) {
     if (req.method !== 'POST') {
@@ -54,6 +52,10 @@ If there's no mistake, set hasMistake to false and leave original/corrected/expl
         )
 
         const data = await response.json()
+
+        // TEMP DEBUG LOG
+        console.log('GEMINI RAW RESPONSE:', JSON.stringify(data))
+
         const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || ''
 
         const cleaned = rawText.replace(/```json|```/g, '').trim()
@@ -66,6 +68,7 @@ If there's no mistake, set hasMistake to false and leave original/corrected/expl
                 reply: rawText || "Sorry, I couldn't process that. Can you try again?",
                 correction: { hasMistake: false, original: '', corrected: '', explanation: '' },
                 newVocabulary: [],
+                debug: data, // TEMP DEBUG
             }
         }
 
