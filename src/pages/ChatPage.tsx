@@ -1,0 +1,141 @@
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { sendMessage } from '../services/chatService'
+import type { Message } from '../types/chat'
+
+function ChatPage() {
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const topic = searchParams.get('topic') || 'Free Conversation'
+
+    const [messages, setMessages] = useState<Message[]>([
+        {
+            id: 'welcome',
+            sender: 'ai',
+            text: `Hey! Let's talk about ${topic.toLowerCase()}. What would you like to share?`,
+        },
+    ])
+    const [input, setInput] = useState('')
+    const [loading, setLoading] = useState(false)
+    const bottomRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
+
+    async function handleSend() {
+        if (!input.trim() || loading) return
+
+        const userMessage: Message = {
+            id: Date.now().toString(),
+            sender: 'user',
+            text: input,
+        }
+        setMessages((prev) => [...prev, userMessage])
+        setInput('')
+        setLoading(true)
+
+        try {
+            const data = await sendMessage(input, topic)
+            const aiMessage: Message = {
+                id: Date.now().toString() + '-ai',
+                sender: 'ai',
+                text: data.reply,
+                correction: data.correction,
+                newVocabulary: data.newVocabulary,
+            }
+            setMessages((prev) => [...prev, aiMessage])
+        } catch (err) {
+            setMessages((prev) => [
+                ...prev,
+                { id: Date.now().toString() + '-err', sender: 'ai', text: "Sorry, something went wrong. Please try again." },
+            ])
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <div className="min-h-screen bg-brand-offwhite flex flex-col">
+            <div className="border-b border-slate-200 bg-white px-6 py-4 flex items-center justify-between">
+                <button
+                    onClick={() => navigate('/topics')}
+                    className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition"
+                >
+                    ← Change topic
+                </button>
+                <span className="text-sm font-medium text-brand-slate-text">{topic}</span>
+            </div>
+
+            <div className="flex-1 max-w-3xl w-full mx-auto px-6 py-6 space-y-4 overflow-y-auto">
+                {messages.map((msg) => (
+                    <div key={msg.id}>
+                        <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                            <div
+                                className={`max-w-[80%] px-4 py-2.5 rounded-xl text-sm ${msg.sender === 'user'
+                                        ? 'bg-brand-indigo text-white'
+                                        : 'bg-white border border-slate-200 text-brand-slate-text'
+                                    }`}
+                            >
+                                {msg.text}
+                            </div>
+                        </div>
+
+                        {msg.correction?.hasMistake && (
+                            <div className="mt-2 max-w-[80%] bg-amber-50 border border-brand-amber/30 rounded-lg p-3 text-xs">
+                                <p className="text-brand-slate-secondary">Your sentence</p>
+                                <p className="text-brand-slate-text mt-0.5">{msg.correction.original}</p>
+                                <p className="text-brand-slate-secondary mt-2">Better version</p>
+                                <p className="text-brand-success font-medium mt-0.5">{msg.correction.corrected}</p>
+                                <p className="text-brand-slate-secondary mt-2">{msg.correction.explanation}</p>
+                            </div>
+                        )}
+
+                        {msg.newVocabulary && msg.newVocabulary.length > 0 && (
+                            <div className="mt-2 max-w-[80%] flex flex-wrap gap-2">
+                                {msg.newVocabulary.map((v) => (
+                                    <div key={v.word} className="bg-indigo-50 border border-brand-indigo/20 rounded-lg px-3 py-2 text-xs">
+                                        <span className="font-medium text-brand-indigo">{v.word}</span>
+                                        <span className="text-brand-slate-secondary"> — {v.meaning}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+
+                {loading && (
+                    <div className="flex justify-start">
+                        <div className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-brand-slate-secondary">
+                            Typing...
+                        </div>
+                    </div>
+                )}
+
+                <div ref={bottomRef} />
+            </div>
+
+            <div className="border-t border-slate-200 bg-white px-6 py-4">
+                <div className="max-w-3xl mx-auto flex gap-3">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                        placeholder="Type your message..."
+                        className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-indigo"
+                    />
+                    <button
+                        onClick={handleSend}
+                        disabled={loading}
+                        className="bg-brand-indigo text-white font-medium px-5 py-2.5 rounded-lg hover:bg-brand-indigo-dark transition disabled:opacity-50"
+                    >
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default ChatPage

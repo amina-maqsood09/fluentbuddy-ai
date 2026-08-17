@@ -40,9 +40,12 @@ function DashboardPage() {
                     ))}
                 </div>
 
-                <p className="mt-10 text-sm text-brand-slate-secondary">
-                    Dashboard content coming in Phase 3 — AI Conversation.
-                </p>
+                <button
+                    onClick={() => navigate('/topics')}
+                    className="mt-10 bg-brand-indigo text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-indigo-dark transition"
+                >
+                    💬 Start Conversation
+                </button>
             </div>
         </div>
     )
