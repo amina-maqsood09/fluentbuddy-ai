@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { sendMessage } from '../services/chatService'
+import { createConversation, saveMessages } from '../services/conversationService'
 import type { Message } from '../types/chat'
 
 function ChatPage() {
@@ -17,11 +18,18 @@ function ChatPage() {
     ])
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
+    const [conversationId, setConversationId] = useState<string | null>(null)
     const bottomRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [messages])
+
+    useEffect(() => {
+        createConversation(topic)
+            .then(setConversationId)
+            .catch((err) => console.error('Could not start conversation:', err))
+    }, [topic])
 
     async function handleSend() {
         if (!input.trim() || loading) return
@@ -31,7 +39,8 @@ function ChatPage() {
             sender: 'user',
             text: input,
         }
-        setMessages((prev) => [...prev, userMessage])
+        const updatedMessages = [...messages, userMessage]
+        setMessages(updatedMessages)
         setInput('')
         setLoading(true)
 
@@ -44,7 +53,14 @@ function ChatPage() {
                 correction: data.correction,
                 newVocabulary: data.newVocabulary,
             }
-            setMessages((prev) => [...prev, aiMessage])
+            const finalMessages = [...updatedMessages, aiMessage]
+            setMessages(finalMessages)
+
+            if (conversationId) {
+                saveMessages(conversationId, finalMessages).catch((err) =>
+                    console.error('Could not save conversation:', err)
+                )
+            }
         } catch (err) {
             setMessages((prev) => [
                 ...prev,
