@@ -3,6 +3,7 @@ import { logOut } from '../services/authService'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { getUserStats, getUserConversations, type UserStats } from '../services/statsService'
+import { getWeaknessPatterns, getTopWeakness, type WeaknessPattern } from '../services/weaknessService'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../services/firebase'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -13,19 +14,22 @@ function DashboardPage() {
     const [stats, setStats] = useState<UserStats | null>(null)
     const [level, setLevel] = useState('—')
     const [chartData, setChartData] = useState<{ name: string; mistakes: number }[]>([])
+    const [weaknesses, setWeaknesses] = useState<WeaknessPattern[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         async function loadData() {
             if (!user) return
             try {
-                const [userStats, userDoc, conversations] = await Promise.all([
+                const [userStats, userDoc, conversations, weaknessData] = await Promise.all([
                     getUserStats(),
                     getDoc(doc(db, 'users', user.uid)),
                     getUserConversations(),
+                    getWeaknessPatterns(),
                 ])
                 setStats(userStats)
                 setLevel(userDoc.data()?.englishLevel || '—')
+                setWeaknesses(weaknessData)
 
                 const sorted = [...conversations].reverse()
                 const data = sorted.slice(-8).map((conv, i) => ({
@@ -49,6 +53,8 @@ function DashboardPage() {
 
     const accuracyPercent =
         stats && stats.totalConversations > 0 ? Math.max(0, 100 - stats.totalMistakes * 3) : 0
+
+    const topWeakness = getTopWeakness(weaknesses)
 
     return (
         <div className="min-h-screen bg-brand-offwhite">
@@ -86,6 +92,38 @@ function DashboardPage() {
                         </div>
                     ))}
                 </div>
+
+                {!loading && topWeakness && (
+                    <div className="mt-8 bg-white border border-brand-amber/40 rounded-xl p-6">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <p className="text-xs text-brand-slate-secondary">Recurring weakness detected</p>
+                                <p className="mt-1 text-lg font-semibold text-brand-slate-text">
+                                    You frequently make mistakes with <span className="text-brand-amber">{topWeakness.topic}</span>
+                                </p>
+                                <p className="mt-1 text-sm text-brand-slate-secondary">
+                                    Found in {topWeakness.count} of your recent messages. Let's practice this topic today.
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => navigate(`/topics?focus=${encodeURIComponent(topWeakness.topic)}`)}
+                            className="mt-4 bg-brand-amber text-white font-medium px-5 py-2.5 rounded-lg hover:bg-amber-600 transition text-sm"
+                        >
+                            Practice this now
+                        </button>
+
+                        {weaknesses.length > 1 && (
+                            <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+                                {weaknesses.slice(1, 5).map((w) => (
+                                    <span key={w.topic} className="text-xs bg-slate-100 text-brand-slate-secondary px-2.5 py-1 rounded-full">
+                                        {w.topic} · {w.count}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {!loading && chartData.length > 1 && (
                     <div className="mt-8 bg-white border border-slate-200 rounded-xl p-6">
