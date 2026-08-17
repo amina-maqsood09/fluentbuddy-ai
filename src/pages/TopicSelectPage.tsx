@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { logOut } from '../services/authService'
 
 const topics = [
     'Daily Life', 'University', 'Friends', 'Travel',
