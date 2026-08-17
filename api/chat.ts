@@ -26,14 +26,15 @@ Respond ONLY with valid JSON in this exact format, no markdown, no extra text:
     "hasMistake": true or false,
     "original": "the user's original sentence if there was a mistake, else empty string",
     "corrected": "the corrected version, else empty string",
-    "explanation": "a short simple explanation of the grammar rule, else empty string"
+    "explanation": "a short simple explanation of the grammar rule, else empty string",
+    "lessonTitle": "a short 2-4 word grammar topic name, e.g. 'Past Simple', 'Articles (a/an/the)', 'Prepositions', else empty string"
   },
   "newVocabulary": [
     { "word": "a useful word from the conversation", "meaning": "simple definition", "example": "example sentence" }
   ]
 }
 
-If there's no mistake, set hasMistake to false and leave original/corrected/explanation empty. newVocabulary can be an empty array if nothing notable.`
+If there's no mistake, set hasMistake to false and leave original/corrected/explanation/lessonTitle empty. newVocabulary can be an empty array if nothing notable.`
 
     try {
         const response = await fetch(
@@ -61,7 +62,7 @@ If there's no mistake, set hasMistake to false and leave original/corrected/expl
         } catch {
             parsed = {
                 reply: rawText || "Sorry, I couldn't process that. Can you try again?",
-                correction: { hasMistake: false, original: '', corrected: '', explanation: '' },
+                correction: { hasMistake: false, original: '', corrected: '', explanation: '', lessonTitle: '' },
                 newVocabulary: [],
             }
         }

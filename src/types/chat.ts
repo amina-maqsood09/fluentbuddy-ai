@@ -7,6 +7,7 @@ export interface Message {
         original: string
         corrected: string
         explanation: string
+        lessonTitle?: string
     }
     newVocabulary?: { word: string; meaning: string; example: string }[]
 }

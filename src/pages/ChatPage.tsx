@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { sendMessage } from '../services/chatService'
 import { createConversation, saveMessages } from '../services/conversationService'
+import { saveVocabWord } from '../services/vocabularyService'
 import type { Message } from '../types/chat'
 
 function ChatPage() {
@@ -19,6 +20,7 @@ function ChatPage() {
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
     const [conversationId, setConversationId] = useState<string | null>(null)
+    const [savedWords, setSavedWords] = useState<Set<string>>(new Set())
     const bottomRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -71,6 +73,15 @@ function ChatPage() {
         }
     }
 
+    async function handleSaveWord(word: string, meaning: string, example: string) {
+        try {
+            await saveVocabWord(word, meaning, example)
+            setSavedWords((prev) => new Set(prev).add(word))
+        } catch (err) {
+            console.error('Could not save word:', err)
+        }
+    }
+
     return (
         <div className="min-h-screen bg-brand-offwhite flex flex-col">
             <div className="border-b border-slate-200 bg-white px-6 py-4 flex items-center justify-between">
@@ -99,6 +110,11 @@ function ChatPage() {
 
                         {msg.correction?.hasMistake && (
                             <div className="mt-2 max-w-[80%] bg-amber-50 border border-brand-amber/30 rounded-lg p-3 text-xs">
+                                {msg.correction.lessonTitle && (
+                                    <span className="inline-block bg-brand-amber/20 text-amber-800 font-medium px-2 py-0.5 rounded mb-2">
+                                        📘 {msg.correction.lessonTitle}
+                                    </span>
+                                )}
                                 <p className="text-brand-slate-secondary">Your sentence</p>
                                 <p className="text-brand-slate-text mt-0.5">{msg.correction.original}</p>
                                 <p className="text-brand-slate-secondary mt-2">Better version</p>
@@ -109,12 +125,29 @@ function ChatPage() {
 
                         {msg.newVocabulary && msg.newVocabulary.length > 0 && (
                             <div className="mt-2 max-w-[80%] flex flex-wrap gap-2">
-                                {msg.newVocabulary.map((v) => (
-                                    <div key={v.word} className="bg-indigo-50 border border-brand-indigo/20 rounded-lg px-3 py-2 text-xs">
-                                        <span className="font-medium text-brand-indigo">{v.word}</span>
-                                        <span className="text-brand-slate-secondary"> — {v.meaning}</span>
-                                    </div>
-                                ))}
+                                {msg.newVocabulary.map((v) => {
+                                    const isSaved = savedWords.has(v.word)
+                                    return (
+                                        <div key={v.word} className="bg-indigo-50 border border-brand-indigo/20 rounded-lg px-3 py-2 text-xs">
+                                            <div className="flex items-center justify-between gap-3">
+                                                <div>
+                                                    <span className="font-medium text-brand-indigo">{v.word}</span>
+                                                    <span className="text-brand-slate-secondary"> — {v.meaning}</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleSaveWord(v.word, v.meaning, v.example)}
+                                                    disabled={isSaved}
+                                                    className={`shrink-0 text-xs font-medium px-2 py-1 rounded transition ${isSaved
+                                                            ? 'text-brand-success cursor-default'
+                                                            : 'text-brand-indigo hover:bg-brand-indigo/10'
+                                                        }`}
+                                                >
+                                                    {isSaved ? '✓ Saved' : '+ Save'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
                             </div>
                         )}
                     </div>
