@@ -72,10 +72,10 @@ function InterviewPage() {
 
     if (result) {
         return (
-            <div className="min-h-screen bg-brand-offwhite flex items-center justify-center px-6">
-                <div className="w-full max-w-lg bg-white border border-slate-200 rounded-xl p-8">
-                    <h2 className="font-heading text-xl font-semibold text-brand-slate-text">Interview Feedback</h2>
-                    <p className="text-sm text-brand-slate-secondary mt-1">{interviewType}</p>
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
+                <div className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                    <h2 className="font-heading text-xl font-semibold text-slate-900">Interview Feedback</h2>
+                    <p className="text-sm text-slate-500 mt-1">{interviewType}</p>
 
                     <table className="w-full mt-6 text-sm">
                         <tbody>
@@ -86,8 +86,8 @@ function InterviewPage() {
                                 ['Confidence', result.confidenceScore],
                             ].map(([label, val]) => (
                                 <tr key={label as string} className="border-b border-slate-100">
-                                    <td className="py-2 text-brand-slate-secondary">{label}</td>
-                                    <td className="py-2 text-right font-medium text-brand-indigo">{val}%</td>
+                                    <td className="py-2 text-slate-500">{label}</td>
+                                    <td className="py-2 text-right font-medium text-indigo-700">{val}%</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -95,10 +95,10 @@ function InterviewPage() {
 
                     {result.whatWentWell?.length > 0 && (
                         <div className="mt-5">
-                            <p className="text-sm font-medium text-brand-success">What you did well</p>
+                            <p className="text-sm font-medium text-emerald-600">What you did well</p>
                             <ul className="mt-1 space-y-1">
                                 {result.whatWentWell.map((p: string, i: number) => (
-                                    <li key={i} className="text-sm text-brand-slate-secondary">• {p}</li>
+                                    <li key={i} className="text-sm text-slate-600">• {p}</li>
                                 ))}
                             </ul>
                         </div>
@@ -106,10 +106,10 @@ function InterviewPage() {
 
                     {result.improve?.length > 0 && (
                         <div className="mt-4">
-                            <p className="text-sm font-medium text-brand-amber">Improve</p>
+                            <p className="text-sm font-medium text-amber-600">Improve</p>
                             <ul className="mt-1 space-y-1">
                                 {result.improve.map((p: string, i: number) => (
-                                    <li key={i} className="text-sm text-brand-slate-secondary">• {p}</li>
+                                    <li key={i} className="text-sm text-slate-600">• {p}</li>
                                 ))}
                             </ul>
                         </div>
@@ -117,7 +117,7 @@ function InterviewPage() {
 
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="mt-6 w-full bg-brand-indigo text-white font-medium py-2.5 rounded-lg hover:bg-brand-indigo-dark transition"
+                        className="mt-6 w-full bg-indigo-700 text-white font-medium py-2.5 rounded-lg hover:bg-indigo-800 transition-colors"
                     >
                         Back to Dashboard
                     </button>
@@ -127,16 +127,16 @@ function InterviewPage() {
     }
 
     return (
-        <div className="min-h-screen bg-brand-offwhite flex flex-col">
+        <div className="min-h-screen bg-slate-50 flex flex-col">
             <div className="border-b border-slate-200 bg-white px-6 py-4 flex items-center justify-between">
-                <button onClick={() => navigate('/dashboard')} className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition">
+                <button onClick={() => navigate('/dashboard')} className="text-sm font-medium text-slate-500 hover:text-indigo-700 transition-colors">
                     ← Exit
                 </button>
-                <span className="text-sm font-medium text-brand-slate-text">{interviewType} Interview</span>
+                <span className="text-sm font-medium text-slate-900">{interviewType} Interview</span>
                 <button
                     onClick={handleFinish}
                     disabled={answeredCount === 0 || evaluating}
-                    className="text-sm font-medium text-brand-amber hover:underline disabled:opacity-40"
+                    className="text-sm font-medium text-amber-600 hover:underline disabled:opacity-40"
                 >
                     {evaluating ? 'Evaluating...' : 'Finish & Get Feedback'}
                 </button>
@@ -146,13 +146,13 @@ function InterviewPage() {
                 {turns.map((turn, i) => (
                     <div key={i} className="space-y-3">
                         <div className="flex justify-start">
-                            <div className="max-w-[80%] bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-brand-slate-text">
+                            <div className="max-w-[80%] bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900">
                                 {turn.question}
                             </div>
                         </div>
                         {turn.answer && (
                             <div className="flex justify-end">
-                                <div className="max-w-[80%] bg-brand-indigo text-white rounded-xl px-4 py-2.5 text-sm">
+                                <div className="max-w-[80%] bg-indigo-700 text-white rounded-xl px-4 py-2.5 text-sm">
                                     {turn.answer}
                                 </div>
                             </div>
@@ -161,7 +161,7 @@ function InterviewPage() {
                 ))}
                 {loading && (
                     <div className="flex justify-start">
-                        <div className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-brand-slate-secondary">
+                        <div className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-500">
                             Thinking...
                         </div>
                     </div>
@@ -177,12 +177,12 @@ function InterviewPage() {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAnswer()}
                         placeholder="Type your answer..."
-                        className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-indigo"
+                        className="flex-1 min-w-0 border border-slate-300 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
                     />
                     <button
                         onClick={handleAnswer}
                         disabled={loading}
-                        className="bg-brand-indigo text-white font-medium px-5 py-2.5 rounded-lg hover:bg-brand-indigo-dark transition disabled:opacity-50"
+                        className="shrink-0 bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors disabled:opacity-50"
                     >
                         Send
                     </button>
