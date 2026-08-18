@@ -8,6 +8,7 @@ import TopicSelectPage from './pages/TopicSelectPage'
 import ChatPage from './pages/ChatPage'
 import HistoryPage from './pages/HistoryPage'
 import HistoryDetailPage from './pages/HistoryDetailPage'
+import ChallengePage from './pages/ChallengePage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
       <Route path="/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
       <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
       <Route path="/history/:id" element={<ProtectedRoute><HistoryDetailPage /></ProtectedRoute>} />
+      <Route path="/challenge" element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
     </Routes>
   )
 }

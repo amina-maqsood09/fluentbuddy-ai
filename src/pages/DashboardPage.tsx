@@ -142,12 +142,20 @@ function DashboardPage() {
                     </div>
                 )}
 
-                <button
-                    onClick={() => navigate('/topics')}
-                    className="mt-8 bg-brand-indigo text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-indigo-dark transition"
-                >
-                    💬 Start Conversation
-                </button>
+                <div className="mt-8 flex gap-3">
+                    <button
+                        onClick={() => navigate('/topics')}
+                        className="bg-brand-indigo text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-indigo-dark transition"
+                    >
+                        💬 Start Conversation
+                    </button>
+                    <button
+                        onClick={() => navigate('/challenge')}
+                        className="border border-brand-amber text-brand-amber font-medium px-6 py-3 rounded-lg hover:bg-amber-50 transition"
+                    >
+                        🎯 Daily Challenge
+                    </button>
+                </div>
             </div>
         </div>
     )
