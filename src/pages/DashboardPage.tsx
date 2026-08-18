@@ -142,7 +142,7 @@ function DashboardPage() {
                     </div>
                 )}
 
-                <div className="mt-8 flex gap-3">
+                <div className="mt-8 flex flex-wrap gap-3">
                     <button
                         onClick={() => navigate('/topics')}
                         className="bg-brand-indigo text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-indigo-dark transition"
@@ -154,6 +154,12 @@ function DashboardPage() {
                         className="border border-brand-amber text-brand-amber font-medium px-6 py-3 rounded-lg hover:bg-amber-50 transition"
                     >
                         🎯 Daily Challenge
+                    </button>
+                    <button
+                        onClick={() => navigate('/interview-select')}
+                        className="border border-slate-300 text-brand-slate-text font-medium px-6 py-3 rounded-lg hover:border-brand-indigo hover:text-brand-indigo transition"
+                    >
+                        💼 Interview Mode
                     </button>
                 </div>
             </div>

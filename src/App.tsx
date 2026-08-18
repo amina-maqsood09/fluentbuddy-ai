@@ -9,6 +9,8 @@ import ChatPage from './pages/ChatPage'
 import HistoryPage from './pages/HistoryPage'
 import HistoryDetailPage from './pages/HistoryDetailPage'
 import ChallengePage from './pages/ChallengePage'
+import InterviewSelectPage from './pages/InterviewSelectPage'
+import InterviewPage from './pages/InterviewPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
       <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
       <Route path="/history/:id" element={<ProtectedRoute><HistoryDetailPage /></ProtectedRoute>} />
       <Route path="/challenge" element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
+      <Route path="/interview-select" element={<ProtectedRoute><InterviewSelectPage /></ProtectedRoute>} />
+      <Route path="/interview" element={<ProtectedRoute><InterviewPage /></ProtectedRoute>} />
     </Routes>
   )
 }
