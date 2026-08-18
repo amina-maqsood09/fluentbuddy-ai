@@ -55,12 +55,14 @@ Be encouraging but honest. Base scores on the actual quality of the writing.`
                 clarityScore: 0,
                 whatWentWell: [],
                 improve: ['Could not evaluate. Please try again.'],
+                debugRaw: rawText,
+                debugData: data,
             }
         }
 
         return res.status(200).json(parsed)
     } catch (err) {
         console.error(err)
-        return res.status(500).json({ error: 'Something went wrong.' })
+        return res.status(500).json({ error: 'Something went wrong.', debugErr: String(err) })
     }
 }
