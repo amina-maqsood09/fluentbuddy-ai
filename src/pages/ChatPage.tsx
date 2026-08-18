@@ -99,15 +99,15 @@ function ChatPage() {
     }
 
     return (
-        <div className="min-h-screen bg-brand-offwhite flex flex-col">
-            <div className="border-b border-slate-200 bg-white px-6 py-4 flex items-center justify-between">
+        <div className="min-h-screen bg-slate-50 flex flex-col">
+            <div className="border-b border-slate-200 bg-white px-6 py-4 flex items-center justify-between shrink-0">
                 <button
                     onClick={() => navigate('/topics')}
-                    className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition"
+                    className="text-sm font-medium text-slate-500 hover:text-indigo-700 transition-colors"
                 >
                     ← Change topic
                 </button>
-                <span className="text-sm font-medium text-brand-slate-text">{topic}</span>
+                <span className="text-sm font-medium text-slate-900">{topic}</span>
             </div>
 
             <div className="flex-1 max-w-3xl w-full mx-auto px-6 py-6 space-y-4 overflow-y-auto">
@@ -117,7 +117,7 @@ function ChatPage() {
                             {msg.sender === 'ai' && speakerSupported && (
                                 <button
                                     onClick={() => (isSpeaking ? stopSpeaking() : speak(msg.text))}
-                                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-brand-slate-secondary hover:bg-slate-100 transition"
+                                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors"
                                     title="Listen"
                                     aria-label={isSpeaking ? 'Stop reading message aloud' : 'Read message aloud'}
                                 >
@@ -126,8 +126,8 @@ function ChatPage() {
                             )}
                             <div
                                 className={`max-w-[80%] px-4 py-2.5 rounded-xl text-sm ${msg.sender === 'user'
-                                    ? 'bg-brand-indigo text-white'
-                                    : 'bg-white border border-slate-200 text-brand-slate-text'
+                                        ? 'bg-indigo-700 text-white'
+                                        : 'bg-white border border-slate-200 text-slate-900'
                                     }`}
                             >
                                 {msg.text}
@@ -135,17 +135,17 @@ function ChatPage() {
                         </div>
 
                         {msg.correction?.hasMistake && (
-                            <div className="mt-2 max-w-[80%] bg-amber-50 border border-brand-amber/30 rounded-lg p-3 text-xs">
+                            <div className="mt-2 max-w-[80%] bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs">
                                 {msg.correction.lessonTitle && (
-                                    <span className="inline-block bg-brand-amber/20 text-amber-800 font-medium px-2 py-0.5 rounded mb-2">
+                                    <span className="inline-block bg-amber-100 text-amber-800 font-medium px-2 py-0.5 rounded mb-2">
                                         📘 {msg.correction.lessonTitle}
                                     </span>
                                 )}
-                                <p className="text-brand-slate-secondary">Your sentence</p>
-                                <p className="text-brand-slate-text mt-0.5">{msg.correction.original}</p>
-                                <p className="text-brand-slate-secondary mt-2">Better version</p>
-                                <p className="text-brand-success font-medium mt-0.5">{msg.correction.corrected}</p>
-                                <p className="text-brand-slate-secondary mt-2">{msg.correction.explanation}</p>
+                                <p className="text-slate-500">Your sentence</p>
+                                <p className="text-slate-900 mt-0.5">{msg.correction.original}</p>
+                                <p className="text-slate-500 mt-2">Better version</p>
+                                <p className="text-emerald-600 font-medium mt-0.5">{msg.correction.corrected}</p>
+                                <p className="text-slate-500 mt-2">{msg.correction.explanation}</p>
                             </div>
                         )}
 
@@ -154,18 +154,18 @@ function ChatPage() {
                                 {msg.newVocabulary.map((v) => {
                                     const isSaved = savedWords.has(v.word)
                                     return (
-                                        <div key={v.word} className="bg-indigo-50 border border-brand-indigo/20 rounded-lg px-3 py-2 text-xs">
+                                        <div key={v.word} className="bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2 text-xs">
                                             <div className="flex items-center justify-between gap-3">
                                                 <div>
-                                                    <span className="font-medium text-brand-indigo">{v.word}</span>
-                                                    <span className="text-brand-slate-secondary"> — {v.meaning}</span>
+                                                    <span className="font-medium text-indigo-700">{v.word}</span>
+                                                    <span className="text-slate-500"> — {v.meaning}</span>
                                                 </div>
                                                 <button
                                                     onClick={() => handleSaveWord(v.word, v.meaning, v.example)}
                                                     disabled={isSaved}
-                                                    className={`shrink-0 text-xs font-medium px-2 py-1 rounded transition ${isSaved
-                                                        ? 'text-brand-success cursor-default'
-                                                        : 'text-brand-indigo hover:bg-brand-indigo/10'
+                                                    className={`shrink-0 text-xs font-medium px-2 py-1 rounded transition-colors ${isSaved
+                                                            ? 'text-emerald-600 cursor-default'
+                                                            : 'text-indigo-700 hover:bg-indigo-100'
                                                         }`}
                                                 >
                                                     {isSaved ? '✓ Saved' : '+ Save'}
@@ -181,7 +181,7 @@ function ChatPage() {
 
                 {loading && (
                     <div className="flex justify-start">
-                        <div className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-brand-slate-secondary">
+                        <div className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-500">
                             Typing...
                         </div>
                     </div>
@@ -190,14 +190,14 @@ function ChatPage() {
                 <div ref={bottomRef} />
             </div>
 
-            <div className="border-t border-slate-200 bg-white px-6 py-4">
+            <div className="border-t border-slate-200 bg-white px-6 py-4 shrink-0">
                 <div className="max-w-3xl mx-auto flex gap-3">
                     {micSupported && (
                         <button
                             onClick={handleMicClick}
-                            className={`shrink-0 w-11 h-11 rounded-lg flex items-center justify-center border transition ${isListening
-                                ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
-                                : 'border-slate-300 text-brand-slate-secondary hover:border-brand-indigo hover:text-brand-indigo'
+                            className={`shrink-0 w-11 h-11 rounded-lg flex items-center justify-center border transition-colors ${isListening
+                                    ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
+                                    : 'border-slate-300 text-slate-500 hover:border-indigo-400 hover:text-indigo-700'
                                 }`}
                             title={isListening ? 'Stop recording' : 'Speak your answer'}
                             aria-label={isListening ? 'Stop voice recording' : 'Start voice recording'}
@@ -215,12 +215,12 @@ function ChatPage() {
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         placeholder={isListening ? 'Listening...' : 'Type your message...'}
                         aria-label="Type your message"
-                        className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-indigo"
+                        className="flex-1 min-w-0 border border-slate-300 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
                     />
                     <button
                         onClick={() => handleSend()}
                         disabled={loading}
-                        className="bg-brand-indigo text-white font-medium px-5 py-2.5 rounded-lg hover:bg-brand-indigo-dark transition disabled:opacity-50"
+                        className="shrink-0 bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-lg hover:bg-indigo-800 transition-colors disabled:opacity-50"
                     >
                         Send
                     </button>
