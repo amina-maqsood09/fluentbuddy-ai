@@ -106,7 +106,7 @@ function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-slate-50 relative overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 py-10">
+            <div className="max-w-6xl mx-auto px-6 py-10 relative z-10">
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200/70">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-heading font-semibold text-lg shrink-0">
@@ -238,7 +238,7 @@ function DashboardPage() {
                     </div>
                 )}
 
-                <div className="mt-6 flex flex-wrap gap-4">
+                <div className="mt-6 flex flex-wrap gap-4 relative z-10">
                     {actionButtons.map((btn) => {
                         const Icon = btn.icon
                         return (
@@ -258,8 +258,8 @@ function DashboardPage() {
             </div>
 
             {/* Peeking mascot, bottom-right corner */}
-            <div className="fixed bottom-0 right-8 md:right-16 pointer-events-none translate-y-[20%] z-0">
-                <MascotCharacter className="w-28 md:w-36 opacity-95 drop-shadow-lg" />
+            <div className="fixed bottom-0 right-4 md:right-10 pointer-events-none translate-y-[15%] z-0 hidden sm:block">
+                <MascotCharacter className="w-20 md:w-28 opacity-90 drop-shadow-lg" />
             </div>
         </div>
     )
