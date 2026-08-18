@@ -71,6 +71,12 @@ function DashboardPage() {
                     </h1>
                     <div className="flex items-center gap-4">
                         <button
+                            onClick={() => navigate('/profile')}
+                            className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition"
+                        >
+                            Profile
+                        </button>
+                        <button
                             onClick={handleDownloadReport}
                             disabled={loading}
                             className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition disabled:opacity-40"
