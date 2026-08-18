@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { getUserStats, getUserConversations, type UserStats } from '../services/statsService'
 import { getWeaknessPatterns, getTopWeakness, type WeaknessPattern } from '../services/weaknessService'
+import { generateProgressReport } from '../services/pdfService'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../services/firebase'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -51,6 +52,11 @@ function DashboardPage() {
         navigate('/login')
     }
 
+    function handleDownloadReport() {
+        if (!stats) return
+        generateProgressReport(user?.displayName || 'Student', level, stats, weaknesses)
+    }
+
     const accuracyPercent =
         stats && stats.totalConversations > 0 ? Math.max(0, 100 - stats.totalMistakes * 3) : 0
 
@@ -64,6 +70,13 @@ function DashboardPage() {
                         Good to see you, {user?.displayName || 'there'} 👋
                     </h1>
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleDownloadReport}
+                            disabled={loading}
+                            className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition disabled:opacity-40"
+                        >
+                            📄 Download Report
+                        </button>
                         <button
                             onClick={() => navigate('/history')}
                             className="text-sm font-medium text-brand-slate-secondary hover:text-brand-indigo transition"
