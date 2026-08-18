@@ -119,14 +119,15 @@ function ChatPage() {
                                     onClick={() => (isSpeaking ? stopSpeaking() : speak(msg.text))}
                                     className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-brand-slate-secondary hover:bg-slate-100 transition"
                                     title="Listen"
+                                    aria-label={isSpeaking ? 'Stop reading message aloud' : 'Read message aloud'}
                                 >
                                     🔊
                                 </button>
                             )}
                             <div
                                 className={`max-w-[80%] px-4 py-2.5 rounded-xl text-sm ${msg.sender === 'user'
-                                        ? 'bg-brand-indigo text-white'
-                                        : 'bg-white border border-slate-200 text-brand-slate-text'
+                                    ? 'bg-brand-indigo text-white'
+                                    : 'bg-white border border-slate-200 text-brand-slate-text'
                                     }`}
                             >
                                 {msg.text}
@@ -163,8 +164,8 @@ function ChatPage() {
                                                     onClick={() => handleSaveWord(v.word, v.meaning, v.example)}
                                                     disabled={isSaved}
                                                     className={`shrink-0 text-xs font-medium px-2 py-1 rounded transition ${isSaved
-                                                            ? 'text-brand-success cursor-default'
-                                                            : 'text-brand-indigo hover:bg-brand-indigo/10'
+                                                        ? 'text-brand-success cursor-default'
+                                                        : 'text-brand-indigo hover:bg-brand-indigo/10'
                                                         }`}
                                                 >
                                                     {isSaved ? '✓ Saved' : '+ Save'}
@@ -195,20 +196,25 @@ function ChatPage() {
                         <button
                             onClick={handleMicClick}
                             className={`shrink-0 w-11 h-11 rounded-lg flex items-center justify-center border transition ${isListening
-                                    ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
-                                    : 'border-slate-300 text-brand-slate-secondary hover:border-brand-indigo hover:text-brand-indigo'
+                                ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
+                                : 'border-slate-300 text-brand-slate-secondary hover:border-brand-indigo hover:text-brand-indigo'
                                 }`}
                             title={isListening ? 'Stop recording' : 'Speak your answer'}
+                            aria-label={isListening ? 'Stop voice recording' : 'Start voice recording'}
+                            aria-pressed={isListening}
                         >
                             🎙️
                         </button>
                     )}
+                    <label htmlFor="chat-input" className="sr-only">Type your message</label>
                     <input
+                        id="chat-input"
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         placeholder={isListening ? 'Listening...' : 'Type your message...'}
+                        aria-label="Type your message"
                         className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-indigo"
                     />
                     <button

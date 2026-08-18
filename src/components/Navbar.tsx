@@ -4,7 +4,7 @@ function Navbar() {
     const navigate = useNavigate()
 
     return (
-        <nav className="sticky top-0 z-50 bg-brand-offwhite/90 backdrop-blur-sm border-b border-slate-200">
+        <nav className="sticky top-0 z-50 bg-brand-offwhite/90 backdrop-blur-sm border-b border-slate-200" aria-label="Main navigation">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
                 <span className="font-heading text-xl font-semibold text-brand-indigo">
                     FluentBuddy AI
